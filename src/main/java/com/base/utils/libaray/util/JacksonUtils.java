@@ -1,11 +1,16 @@
 package com.base.utils.libaray.util;
 
+import java.io.PrintWriter;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletResponse;
+
 import java.util.TimeZone;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,6 +22,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.cfg.MapperConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * 
@@ -217,6 +224,27 @@ public class JacksonUtils {
 	 */
 	public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
 		return objectMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+	}
+	
+	
+	/**
+	 * json字串输出到response
+	 * @param obj
+	 * @param response
+	 */
+	public static void outPutJson(Object obj, HttpServletResponse response) {
+		try {
+			
+			String message = JacksonUtils.toJson2(obj);
+            response.setContentType("text/html;charset=utf-8");
+            response.setHeader("Cache-Control", "no-cache");  
+            PrintWriter out = response.getWriter();  
+            out.print(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}	
 	}
 
 	
