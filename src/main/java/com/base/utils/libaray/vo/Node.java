@@ -1,0 +1,54 @@
+package com.base.utils.libaray.vo;
+
+
+public class Node {
+
+	 /**
+	 * 节点编号
+	 */
+	 public Long id;
+	 
+	 /**
+		 * 父节点编号
+		 */
+	 public Long parentId; 
+	 /**
+	 * 节点内容
+	 */
+	 public String nameCn;
+	 public String nameEn;
+	 /**
+	 * 孩子节点列表
+	 */
+	 private Children children = new Children();
+	  
+	 // 先序遍历，拼接JSON字符串
+	 public String toString() { 
+	 String result = "{"
+	  + "id : '" + id + "'"
+	  + ", nameCn : '" + nameCn + "'"
+	   + ", nameEn : '" + nameEn + "'"
+	    + ", parentId : '" + parentId + "'";
+	  
+	 if (children != null && children.getSize() != 0) {
+	  result += ", children : " + children.toString();
+	 } else {
+	  result += ", leaf : true";
+	 }
+	   
+	 return result + "}";
+	 }
+	  
+	 // 兄弟节点横向排序
+	 public void sortChildren() {
+	 if (children != null && children.getSize() != 0) {
+	  children.sortChildren();
+	 }
+}
+ 
+// 添加孩子节点
+public void addChild(Node node) {
+	 this.children.addChild(node);
+}
+
+}

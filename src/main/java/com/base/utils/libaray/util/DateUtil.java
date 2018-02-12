@@ -1,0 +1,422 @@
+package com.base.utils.libaray.util;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.regex.Pattern;
+
+public class DateUtil {
+	private final static SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
+
+	private final static SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
+
+	private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
+
+	private final static SimpleDateFormat sdfDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	private final static SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
+
+	public final static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public final static String DATE_TIME_FORMAT1 = "yyyy-MM-dd HH:mm";
+	public final static String DATE_FORMAT = "yyyy-MM-dd";
+	public final static String DATE_TIME_FORMAT_1 = "yyyy/MM/dd HH:mm";
+	public final static String DATE_TIME_FORMAT_2 = "yyyy/MM/dd HH:mm:ss";
+	public final static String DATE_TIME_FORMAT_3 = "dd MMM, yyyy, HH:mm";
+	public final static String DATE_TIME_FORMAT_4 = "dd-MMM-yyyy HH:mm";
+	public final static String DATE_TIME_FORMAT_5 = "dd MMM, yyyy HH:mm";
+	public final static String DATE_TIME_FORMAT_6 = "dd MMM yyyy SSS";
+	public final static String DATE_TIME_FORMAT_7 = "dd-MMM-yyyy";
+	public final static String DATE_TIME_FORMAT_8 = "dd/MM/yyyy";
+	public final static String DATE_TIME_FORMAT_9 = "dd/MM/yyyy HH:mm:ss";
+
+	/**
+	 * 获取YYYY格式
+	 *
+	 * @return
+	 */
+	public static String getYear() {
+		return sdfYear.format(new Date());
+	}
+
+	/**
+	 * 格式化日期
+	 * 
+	 * @return
+	 */
+	public static Date fomatDateUs(String date, String smt) {
+		DateFormat fmt = new SimpleDateFormat(smt, Locale.US);
+		try {
+			return fmt.parse(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 格式化日期
+	 * 
+	 * @return
+	 */
+	public static String fomatDateUs(Date date, String smt) {
+		DateFormat fmt = new SimpleDateFormat(smt, Locale.US);
+		try {
+			return fmt.format(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 获取YYYY-MM-DD格式
+	 *
+	 * @return
+	 */
+	public static String getDay() {
+		return sdfDay.format(new Date());
+	}
+
+	/**
+	 * 获取YYYYMMDD格式
+	 *
+	 * @return
+	 */
+	public static String getDays() {
+		return sdfDays.format(new Date());
+	}
+
+	/**
+	 * 获取YYYYMMDD格式
+	 *
+	 * @return
+	 */
+	public static String getDays(Date date) {
+		return sdfDays.format(date);
+	}
+
+	/**
+	 * 获取YYYY-MM-DD HH:mm:ss格式
+	 *
+	 * @return
+	 */
+	public static String getTime() {
+		return sdfDateTime.format(new Date());
+	}
+
+	/**
+	 * 格式化时间：sHH:mm:ss
+	 */
+	public static Date getTime(String date) throws ParseException {
+		return sdfTime.parse(date);
+	}
+
+	/**
+	 * 格式化时间：YYYY-MM-DD HH:mm:ss
+	 */
+	public static Date getDateTime(String date) throws ParseException {
+		return sdfDateTime.parse(date);
+	}
+
+	/**
+	 * @param s
+	 * @param e
+	 * @return boolean
+	 * @throws @Title:
+	 *             compareDate
+	 * @Description: TODO(日期比较，如果s>=e 返回true 否则返回false)
+	 * @author luguosui
+	 */
+	public static boolean compareDate(String s, String e) {
+		if (fomatDate(s) == null || fomatDate(e) == null) {
+			return false;
+		}
+		return fomatDate(s).getTime() >= fomatDate(e).getTime();
+	}
+
+	/**
+	 * 格式化日期
+	 *
+	 * @return
+	 */
+	public static Date fomatDate(String date) {
+		if (null == date || "".equals(date)) {
+			return null;
+		}
+		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			if (date.contains("/")) {
+				String[] arr = date.split("/");
+				if (arr[0].length() <= 2) {
+					date = arr[2] + "-" + arr[1] + "-" + arr[0];
+					return fmt.parse(date);
+				}
+
+			} else if (date.contains("'")) {
+				date = date.replace("'", "");
+				Date da = new Date(date);
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				String dastr = sdf.format(da);
+				String[] arr = dastr.split("-");
+				date = arr[2] + "-" + arr[1] + "-" + arr[0];
+				return fmt.parse(date);
+			} else if (date.contains("-")) {
+				String[] arr = date.split("-");
+				if (arr[0].length() <= 2) {
+					date = arr[2] + "-" + arr[1] + "-" + arr[0];
+					return fmt.parse(date);
+				} else {
+					return fmt.parse(date);
+				}
+			} else {
+				return fmt.parse(date);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	/**
+	 * 格式化日期
+	 *
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date fomatDate(String date, String pattern) throws ParseException {
+		DateFormat fmt = new SimpleDateFormat(pattern);
+		return fmt.parse(date);
+	}
+
+	public static Date fomatDate(String[] dates) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, Integer.valueOf(dates[0]));
+		calendar.set(Calendar.MONTH, Integer.valueOf(dates[1]) - 1);
+		calendar.set(Calendar.DATE, Integer.valueOf((dates[2])));
+		calendar.set(Calendar.MINUTE, 00);
+		calendar.set(Calendar.SECOND, 00);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 将日期格式fsmt 转换为 rsmt日期格式
+	 */
+	public static String fomatDate(String date, String fsmt, String rsmt) {
+
+		DateFormat fmt = new SimpleDateFormat(fsmt);
+		try {
+			Date fDate = fmt.parse(date);
+			return fomatDate(fDate, rsmt);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 格式化日期
+	 *
+	 * @return
+	 */
+	public static String fomatDate(Date date, String mt) {
+		DateFormat fmt = new SimpleDateFormat(mt);
+		try {
+			return fmt.format(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * 校验日期是否合法
+	 *
+	 * @return
+	 */
+	public static boolean isValidDate(String s) {
+		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			fmt.parse(s);
+			return true;
+		} catch (Exception e) {
+			// 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
+			return false;
+		}
+	}
+
+	public static int getDiffYear(String startTime, String endTime) {
+		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			long aa = 0;
+			int years = (int) (((fmt.parse(endTime).getTime() - fmt.parse(startTime).getTime()) / (1000 * 60 * 60 * 24))
+					/ 365);
+			return years;
+		} catch (Exception e) {
+			// 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
+			return 0;
+		}
+	}
+
+	/**
+	 * <li>功能描述：时间相减得到天数
+	 *
+	 * @param beginDateStr
+	 * @param endDateStr
+	 * @return long
+	 * @author Administrator
+	 */
+	public static long getDaySub(String beginDateStr, String endDateStr) {
+		long day = 0;
+		java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date beginDate = null;
+		java.util.Date endDate = null;
+
+		try {
+			beginDate = format.parse(beginDateStr);
+			endDate = format.parse(endDateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		day = (endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000);
+		// System.out.println("相隔的天数="+day);
+
+		return day;
+	}
+
+	/**
+	 * 得到n天之后的日期
+	 *
+	 * @param days
+	 * @return
+	 */
+	public static String getAfterDayDate(String days) {
+		int daysInt = Integer.parseInt(days);
+
+		Calendar canlendar = Calendar.getInstance(); // java.util包
+		canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+		Date date = canlendar.getTime();
+
+		SimpleDateFormat sdfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateStr = sdfd.format(date);
+
+		return dateStr;
+	}
+
+	/**
+	 * 得到n天之后的日期
+	 *
+	 * @param days
+	 * @return
+	 */
+	public static Date getAfterDayDate(int daysInt) {
+		Calendar canlendar = Calendar.getInstance(); // java.util包
+		canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+		return canlendar.getTime();
+	}
+
+	/**
+	 * 得到n天之后是周几
+	 *
+	 * @param days
+	 * @return
+	 */
+	public static String getAfterDayWeek(String days) {
+		int daysInt = Integer.parseInt(days);
+
+		Calendar canlendar = Calendar.getInstance(); // java.util包
+		canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
+		Date date = canlendar.getTime();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("E");
+		String dateStr = sdf.format(date);
+
+		return dateStr;
+	}
+
+	public static void main(String[] args) {
+		// System.out.println(getDays());
+		// System.out.println(getAfterDayWeek("3"));
+
+		// System.out.println(stampToDate("1505357760033"));
+
+		// System.out.println(addReduceDay(new Date(),-5));
+
+		try {
+			System.out.println(DateUtil.fomatDateUs("29-Jan-2018 10:06", DateUtil.DATE_TIME_FORMAT_4));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public static final String REGEX_NUM = "^[0-9]+\\.{0,1}[0-9]{0,}$";
+
+	public static boolean isNumber(String str) {
+		return Pattern.matches(REGEX_NUM, str);
+	}
+
+	public static Date parseDay(String strDate) throws ParseException {
+		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+		if (!isNumber(strDate.replace("/", ""))) {
+			return null;
+		}
+		String[] arr = strDate.split("/");
+		strDate = arr[2] + "-" + arr[1] + "-" + arr[0];
+		return fmt.parse(strDate);
+	}
+
+	// /**
+	// * 时间戳转日期
+	// * @param ms
+	// * @return
+	// */
+	// public static Date transForDate(Long ms){
+	// if(ms==null){
+	// ms=0;
+	// }
+	// long msl=(long)ms*1000;
+	// SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	// Date temp=null;
+	// if(ms!=null){
+	// try {
+	// String str=sdf.format(msl);
+	// temp=sdf.parse(str);
+	// } catch (ParseException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// return temp;
+	// }
+
+	/*
+	 * 将时间戳转换为时间
+	 */
+	public static String stampToDate(String s) {
+		String res;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		long lt = new Long(s);
+		Date date = new Date(lt);
+		res = simpleDateFormat.format(date);
+		return res;
+	}
+
+	/**
+	 * 加减几天
+	 * 
+	 * @param date
+	 * @param day
+	 * @return
+	 */
+	public static Date addReduceDay(Date date, int day) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, day);
+		return calendar.getTime();
+	}
+
+}
