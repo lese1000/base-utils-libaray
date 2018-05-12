@@ -71,4 +71,8 @@ public class NetworkUtil {
         }
         return ip;
     }
+    
+    public static String getDomain(HttpServletRequest request) {
+    		return request.getScheme() + "://" + request.getServerName() + ":" +  request.getServerPort() ;
+    }
 }

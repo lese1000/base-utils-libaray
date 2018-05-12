@@ -31,6 +31,7 @@ public class DateUtil {
 	public final static String DATE_TIME_FORMAT_7 = "dd-MMM-yyyy";
 	public final static String DATE_TIME_FORMAT_8 = "dd/MM/yyyy";
 	public final static String DATE_TIME_FORMAT_9 = "dd/MM/yyyy HH:mm:ss";
+	public final static String DATE_TIME_FORMAT_10 = "yyMMddHHmmssSSS";
 
 	/**
 	 * 获取YYYY格式

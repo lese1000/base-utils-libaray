@@ -12,6 +12,15 @@ import javax.servlet.http.HttpServletResponse;
  * Cookie工具类
  */
 public class CookieUtils {
+	
+	/**
+	 * 设置 Cookie（会话级别，浏览器关闭即失效）
+	 * @param name 名称
+	 * @param value 值
+	 */
+	public static void setSessionCookie(HttpServletResponse response, String name, String value) {
+		setCookie(response, name, value, 0);
+	}
 
 	/**
 	 * 设置 Cookie（生成时间为1天）
@@ -54,7 +63,9 @@ public class CookieUtils {
 	public static void setCookie(HttpServletResponse response, String name, String value, String path, int maxAge) {
 		Cookie cookie = new Cookie(name, null);
 		cookie.setPath(path);
-		cookie.setMaxAge(maxAge);
+		if( 0 != maxAge) {
+			cookie.setMaxAge(maxAge);
+		}
 		try {
 			cookie.setValue(URLEncoder.encode(value, "utf-8"));
 		} catch (UnsupportedEncodingException e) {
